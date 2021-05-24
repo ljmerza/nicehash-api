@@ -45,11 +45,12 @@ async def read_root():
 async def available():
   """Return availability"""
   rig = await get_rig()
-  return (
+  message = (
       rig is not None
       and rig.get("minerStatus", "UNKNOWN")
       not in ["DISABLED", "TRANSFERED", "UNKNOWN", "OFFLINE"]
   )
+  return {"message": message}
 
 @app.get("/device_info/{rig_id}")
 async def device_info(rig_id):
