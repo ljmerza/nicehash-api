@@ -10,7 +10,7 @@ import uuid
 import aiohttp
 
 
-def get_epoch_ms_from_now(self):
+def get_epoch_ms_from_now():
     """Return epoch from now"""
     now = datetime.now()
     now_ec_since_epoch = mktime(now.timetuple()) + now.microsecond / 1000000.0
