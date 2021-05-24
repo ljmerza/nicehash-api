@@ -13,7 +13,9 @@ CONFIG_ORG_ID = os.getenv('CONFIG_ORG_ID')
 CONFIG_KEY = os.getenv('CONFIG_KEY')
 CONFIG_SECRET = os.getenv('CONFIG_SECRET')
 NICEHASH_API_ENDPOINT = os.getenv('NICEHASH_API_ENDPOINT')
+
 ROOT_PATH = os.getenv('ROOT_PATH')
+ROOT_PATH = f"/{ROOT_PATH}" if ROOT_PATH else ''
 
 app = FastAPI()
 
@@ -37,7 +39,7 @@ async def get_rig(rig_id):
 
 @app.get("/")
 async def read_root():
-    message = f"Hello world! Using Python {version}"
+    message = f"Hello world! Using Python {version}. Root: {ROOT_PATH}"
     return {"message": message}
 
 
@@ -54,7 +56,7 @@ async def available(rig_id):
 
 
 @app.get("/rigs")
-async def rigs(rig_id):
+async def rigs():
     rigs = await api.get_rigs_data()
     return {"message": rigs}
 
