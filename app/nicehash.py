@@ -1,16 +1,24 @@
-""" Implementation of the NiceHash API """
+"""Implementation of the NiceHash API """
 
 from datetime import datetime
-from time import mktime
-import uuid
+from hashlib import sha256
 import hmac
 import json
-from hashlib import sha256
+from time import mktime
+import uuid
+
 import aiohttp
 
 
+def get_epoch_ms_from_now(self):
+    """Return epoch from now"""
+    now = datetime.now()
+    now_ec_since_epoch = mktime(now.timetuple()) + now.microsecond / 1000000.0
+    return int(now_ec_since_epoch * 1000)
+
+
 class NiceHashPrivateAPI:
-    """ Implementation of the API calls """
+    """Implementation of the API calls """
 
     def __init__(self, host, organisation_id, key, secret, verbose=False):
         """Init the API"""
@@ -23,7 +31,7 @@ class NiceHashPrivateAPI:
     async def request(self, method, path, query="", query2=None, body=None):
         """NiceHash API Request"""
 
-        xtime = self.get_epoch_ms_from_now()
+        xtime = get_epoch_ms_from_now()
         xnonce = str(uuid.uuid4())
 
         message = bytearray(self.key, "utf-8")
@@ -121,9 +129,3 @@ class NiceHashPrivateAPI:
             None,
             {"rigId": rig_id, "action": action},
         )
-
-    def get_epoch_ms_from_now(self):
-        """Return epoch from now"""
-        now = datetime.now()
-        now_ec_since_epoch = mktime(now.timetuple()) + now.microsecond / 1000000.0
-        return int(now_ec_since_epoch * 1000)
